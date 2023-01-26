@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "71160016830",
+    "project_id": "fitness-compose-a5487",
+    "storage_bucket": "fitness-compose-a5487.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71160016830:android:f7ae1500ad21a1fb2fd3ef",
+        "android_client_info": {
+          "package_name": "matej.lamza.fitnesscoachhelper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "71160016830-ks3d2jmd1b4e0uc245hitblftshoul2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMscX_df5_GQbsCx6C9TKt2_5RGBVnG6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "71160016830-ks3d2jmd1b4e0uc245hitblftshoul2e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71160016830:android:62409c859bfa05662fd3ef",
+        "android_client_info": {
+          "package_name": "matej.lamza.mycoach"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "71160016830-r29j6i0l7b9jukpegg8g8d1835joufaq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "matej.lamza.mycoach",
+            "certificate_hash": "153b12bff5027eab53ca1d1e470932464f6005fd"
+          }
+        },
+        {
+          "client_id": "71160016830-ks3d2jmd1b4e0uc245hitblftshoul2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMscX_df5_GQbsCx6C9TKt2_5RGBVnG6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "71160016830-ks3d2jmd1b4e0uc245hitblftshoul2e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

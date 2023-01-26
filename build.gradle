@@ -1,0 +1,20 @@
+buildscript {
+    ext {
+        coil_version = "2.2.2"
+        compose_ui_version = '1.2.0'
+
+        flipper_version = "0.136.0"
+        flipper_soloader = "0.10.1"
+
+        gson_version = "2.10.1"
+
+        koin_compose_version = "3.4.1"
+
+        nav_version = "2.5.3"
+    }
+}// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    id 'com.android.application' version '7.4.0' apply false
+    id 'com.android.library' version '7.4.0' apply false
+    id 'org.jetbrains.kotlin.android' version '1.7.0' apply false
+}
