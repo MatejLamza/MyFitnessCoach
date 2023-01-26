@@ -1,10 +1,11 @@
 package matej.lamza.mycoach.ui.splash
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import matej.lamza.mycoach.R
 import matej.lamza.mycoach.common.ErrorMessage
 import matej.lamza.mycoach.common.exception.SessionNotFound
@@ -37,47 +38,41 @@ class SplashViewModel(private val sessionPrefs: SessionPrefs) : ViewModel() {
 
     private val viewModelState = MutableStateFlow(SplashViewModelState(isLoading = true))
     val uiState = viewModelState
-        .map { it.toUIState() }
+        .map(SplashViewModelState::toUIState)
         .stateIn(viewModelScope, SharingStarted.Eagerly, viewModelState.value.toUIState())
 
     init {
         viewModelScope.launch {
-            splash().join()
-            processSessionJob()
+            processSession()
         }
     }
 
-    private fun splash() = viewModelScope.launch { delay(2000) }
-
-    private fun processSessionJob() = viewModelScope.launch {
+    private fun processSession() =
         launchWithState(viewModelState) {
-            val temp = sessionPrefs.getUser()
-            Log.d("bb", "Temp: $temp")
-            if (temp == null) State.Error(SessionNotFound())
+            val user = sessionPrefs.getUser()
+            if (user == null) State.Error(SessionNotFound())
             else State.Done(data = true)
-
         }
-    }
-}
 
-private fun ViewModel.launchWithState(
-    state: MutableStateFlow<SplashViewModelState>,
-    context: CoroutineContext = EmptyCoroutineContext,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
-    block: suspend CoroutineScope.() -> State<Boolean>
-) {
-    viewModelScope.launch(context, start) {
-        val result = block(this)
-        state.update {
-            when (result) {
-                is State.Done -> it.copy(isLoading = false, isUserFound = result.data)
-                is State.Error -> {
-                    val errorMessages = it.errorMessages + ErrorMessage(
-                        id = UUID.randomUUID().mostSignificantBits, messageId = R.string.google_app_id
-                    )
-                    it.copy(isUserFound = null, errorMessages = errorMessages, isLoading = false)
+    private fun ViewModel.launchWithState(
+        state: MutableStateFlow<SplashViewModelState>,
+        context: CoroutineContext = EmptyCoroutineContext,
+        start: CoroutineStart = CoroutineStart.DEFAULT,
+        block: suspend CoroutineScope.() -> State<Boolean>
+    ) {
+        viewModelScope.launch(context, start) {
+            val result = block(this)
+            state.update {
+                when (result) {
+                    is State.Done -> it.copy(isLoading = false, isUserFound = result.data)
+                    is State.Error -> {
+                        val errorMessages = it.errorMessages + ErrorMessage(
+                            id = UUID.randomUUID().mostSignificantBits, messageId = R.string.google_app_id
+                        )
+                        it.copy(isUserFound = null, errorMessages = errorMessages, isLoading = false)
+                    }
+                    else -> throw java.lang.IllegalStateException("")
                 }
-                else -> throw java.lang.IllegalStateException("")
             }
         }
     }

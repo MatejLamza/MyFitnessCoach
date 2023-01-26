@@ -8,26 +8,14 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.Button
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.identity.SignInCredential
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import matej.lamza.mycoach.data.local.session.SessionProvider
-import matej.lamza.mycoach.data.toDomainUser
 
 private const val TAG = "GoogleOneTap"
 
@@ -42,13 +30,12 @@ fun GoogleOneTapSignIn(
     val coroutineScope = rememberCoroutineScope()
     val oneTapClient = remember { Identity.getSignInClient(context) }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
-  /*      handleGoogleOneTapResult(
-            oneTapClient = oneTapClient,
-            activityResult = it,
-            sessionProvider,
-            onSignInSuccess = onSignInSuccess,
-            onSignInFailed = onSignInFailed,
-        )*/
+        val credentials = getIDTokenFromGoogle(it, oneTapClient)
+        if (credentials != null) {
+            coroutineScope.launch {
+                authenticateWithFirebase(credentials, sessionProvider, onSignInSuccess, onFailure = onSignInFailed)
+            }
+        }
     }
 
     GoogleSignInButton {
@@ -92,11 +79,8 @@ private fun signIn(
 
     oneTapClient.beginSignIn(signInRequest)
         .addOnSuccessListener { result ->
-            runCatching {
-                signInLauncher.launch(IntentSenderRequest.Builder(result.pendingIntent).build())
-            }.onFailure {
-                onSignInFailed(it)
-            }
+            runCatching { signInLauncher.launch(IntentSenderRequest.Builder(result.pendingIntent).build()) }
+                .onFailure { onSignInFailed(it) }
         }
         .addOnFailureListener { error ->
             if (isAutoSignInEnabled) {
@@ -115,30 +99,21 @@ private fun signIn(
 private fun getIDTokenFromGoogle(
     activityResult: ActivityResult,
     oneTapClient: SignInClient
-) {
-    if (activityResult.resultCode == Activity.RESULT_OK) {
-        val googleCredentials = oneTapClient.getSignInCredentialFromIntent(activityResult.data)
-    }
+): SignInCredential? {
+    return if (activityResult.resultCode == Activity.RESULT_OK)
+        oneTapClient.getSignInCredentialFromIntent(activityResult.data)
+    else null
 }
 
-
-private fun handleGoogleOneTapResult(
-    oneTapClient: SignInClient,
-    activityResult: ActivityResult,
+private suspend fun authenticateWithFirebase(
+    signInCredentials: SignInCredential,
     sessionProvider: SessionProvider,
-    onSignInSuccess: (() -> Unit),
-    onSignInFailed: ((Throwable) -> Unit)
+    onSuccess: (() -> Unit),
+    onFailure: ((Throwable) -> Unit)
 ) {
-    val firebaseAuth = FirebaseAuth.getInstance()
-    if (activityResult.resultCode == Activity.RESULT_OK)
-        runCatching {
-            val googleCredentials = oneTapClient.getSignInCredentialFromIntent(activityResult.data)
-            val firebaseCredentials = GoogleAuthProvider.getCredential(googleCredentials.googleIdToken, null)
-            firebaseAuth.signInWithCredential(firebaseCredentials)
-                .addOnSuccessListener { onSignInSuccess.invoke() }
-                .addOnFailureListener { Log.e(SessionProvider.TAG, "Failure: $it ", it); throw it }
-        }.onFailure { onSignInFailed(it) }
-    else
-        onSignInFailed(IllegalStateException("Error happened in activity result!"))
-
+    runCatching {
+        sessionProvider.login(signInCredentials)
+        onSuccess.invoke()
+    }.onFailure(onFailure)
 }
+

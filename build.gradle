@@ -6,6 +6,8 @@ buildscript {
         flipper_version = "0.136.0"
         flipper_soloader = "0.10.1"
 
+        lifecycle_version = "2.5.1"
+
         gson_version = "2.10.1"
 
         koin_compose_version = "3.4.1"

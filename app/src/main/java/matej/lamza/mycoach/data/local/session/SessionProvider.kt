@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import matej.lamza.mycoach.data.toDomainUser
 
@@ -15,15 +16,13 @@ class SessionProvider(private val sessionPrefs: SessionPrefs, private val fireba
         const val TAG = "SessionProvider"
     }
 
-    suspend fun login(
-        googleCredentials: SignInCredential
-    ) {
+    suspend fun login(googleCredentials: SignInCredential) {
         withContext(IO) {
-            Log.d("bbb", "login: ")
             val firebaseCredentials = GoogleAuthProvider.getCredential(googleCredentials.googleIdToken, null)
             firebaseAuth.signInWithCredential(firebaseCredentials)
                 .addOnSuccessListener { launch { sessionPrefs.setUser(it.toDomainUser()) } }
                 .addOnFailureListener { Log.e(TAG, "Failure: $it ", it); throw it }
+                .await()
         }
     }
 
