@@ -5,12 +5,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import matej.lamza.mycoach.data.local.session.SessionProvider
 import matej.lamza.mycoach.ui.home.HomeScreen
+import matej.lamza.mycoach.ui.signin.LoginViewModel
 import matej.lamza.mycoach.ui.signin.SignInRoute
 import matej.lamza.mycoach.ui.splash.SplashRoute
 import matej.lamza.mycoach.ui.splash.SplashViewModel
-import org.koin.androidx.compose.get
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -26,13 +25,16 @@ fun MyCoachNavHost(
         composable(AppRoute.SPLASH) {
             val splashViewModel = koinViewModel<SplashViewModel>()
             SplashRoute(splashViewModel,
-                onSessionNotFound = { navController.navigate(AppRoute.SIGN_IN) },
+                onSessionNotFound = { navController.navigate(AppRoute.SIGN_IN) { launchSingleTop = true } },
                 onSessionFound = { navController.navigate(AppRoute.HOME) }
             )
         }
         composable(AppRoute.SIGN_IN) {
-            val sessionProvider = get<SessionProvider>()
-            SignInRoute(sessionProvider = sessionProvider, onSignInSuccess = { navController.navigate(AppRoute.HOME) })
+            val loginViewModel = koinViewModel<LoginViewModel>()
+            SignInRoute(
+                loginViewModel = loginViewModel,
+                onLoginSuccess = { navController.navigate(AppRoute.HOME) { launchSingleTop = true } },
+            )
         }
         composable(AppRoute.HOME) { HomeScreen() }
     }

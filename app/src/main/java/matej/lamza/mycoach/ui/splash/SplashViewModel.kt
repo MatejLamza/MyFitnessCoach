@@ -2,6 +2,7 @@ package matej.lamza.mycoach.ui.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.*
@@ -34,7 +35,7 @@ private data class SplashViewModelState(
             SplashUIState.UserFound(isLoading = isLoading, isUserFound = isUserFound)
 }
 
-class SplashViewModel(private val sessionPrefs: SessionPrefs) : ViewModel() {
+class SplashViewModel(private val sessionPrefs: SessionPrefs, private val firebaseAuth: FirebaseAuth) : ViewModel() {
 
     private val viewModelState = MutableStateFlow(SplashViewModelState(isLoading = true))
     val uiState = viewModelState
@@ -49,8 +50,8 @@ class SplashViewModel(private val sessionPrefs: SessionPrefs) : ViewModel() {
 
     private fun processSession() =
         launchWithState(viewModelState) {
-            val user = sessionPrefs.getUser()
-            if (user == null) State.Error(SessionNotFound())
+            val doesSessionExist = sessionPrefs.getUser() != null && firebaseAuth.currentUser != null
+            if (!doesSessionExist) State.Error(SessionNotFound())
             else State.Done(data = true)
         }
 

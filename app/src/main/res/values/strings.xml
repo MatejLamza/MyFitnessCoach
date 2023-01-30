@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MyCoach</string>
+
+
+    <!-- Exceptions -->
+    <string name="unknown_error">Unknown Error</string>
+    <string name="error_missing_google_credentials">Please check if you have Google account connected.</string>
 </resources>
