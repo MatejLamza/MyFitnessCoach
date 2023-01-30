@@ -1,8 +1,5 @@
 package matej.lamza.mycoach.ui.signin
 
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -13,14 +10,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.identity.SignInCredential
+import matej.lamza.mycoach.common.composables.UIErrorHandler
 import matej.lamza.mycoach.ui.google.GoogleSignInButton
 
 @Composable
@@ -33,7 +31,6 @@ fun SignInScreen(
     getToken: ((ActivityResult, SignInClient) -> SignInCredential?)
 ) {
 
-    Log.d("SignInScreen", "SignInScreen: STATE: $uiState ")
     val context = LocalContext.current
     val oneTapClient = remember { Identity.getSignInClient(context) }
 
@@ -58,32 +55,10 @@ fun SignInScreen(
             }
         }
 
-        handleErrors(
+        UIErrorHandler(
             context = LocalContext.current,
             uiState = uiState,
             onErrorDismissed = onErrorDismissed,
         )
-    }
-}
-
-
-@Composable
-private fun handleErrors(
-    context: Context,
-    uiState: LoginUIState,
-    onErrorDismissed: (Long) -> Unit,
-) {
-    Log.d("LoginGoogle", "handleErrors: ${uiState.errorMessages} ")
-    if (uiState.errorMessages.isNotEmpty()) {
-        val errorMessage = remember(uiState) { uiState.errorMessages[0] }
-        val errorMessageText = stringResource(id = errorMessage.messageId)
-        // If onRefreshPosts or onErrorDismiss change while the LaunchedEffect is running,
-        // don't restart the effect and use the latest lambda values.
-        val onErrorDismissState by rememberUpdatedState(onErrorDismissed)
-
-        LaunchedEffect(errorMessageText) {
-            Toast.makeText(context, errorMessageText, Toast.LENGTH_LONG).show()
-            onErrorDismissState(errorMessage.id)
-        }
     }
 }

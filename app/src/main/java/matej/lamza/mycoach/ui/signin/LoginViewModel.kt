@@ -11,17 +11,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import matej.lamza.mycoach.BuildConfig
 import matej.lamza.mycoach.common.ErrorMessage
 import matej.lamza.mycoach.common.exception.UnknownErrorException
 import matej.lamza.mycoach.common.state.State
+import matej.lamza.mycoach.common.state.UiState
 import matej.lamza.mycoach.data.local.session.SessionProvider
 import matej.lamza.mycoach.utils.ErrorMapper
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-sealed interface LoginUIState {
-    val isLoading: Boolean
-    var errorMessages: List<ErrorMessage>
+sealed interface LoginUIState : UiState {
+    override val isLoading: Boolean
+    override var errorMessages: List<ErrorMessage>
 
     data class LoginSuccess(
         override val isLoading: Boolean,
@@ -58,7 +60,7 @@ class LoginViewModel(private val sessionProvider: SessionProvider) : ViewModel()
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
-                    .setServerClientId("71160016830-jmievthqgi14kgjh8shsej74d1002gkg.apps.googleusercontent.com")
+                    .setServerClientId(BuildConfig.WEB_CLIENT_ID)
                     .setFilterByAuthorizedAccounts(false)
                     .build()
             )
@@ -82,7 +84,6 @@ class LoginViewModel(private val sessionProvider: SessionProvider) : ViewModel()
                     it.copy(isLoading = false, errorMessages = it.errorMessages + ErrorMapper.mapException(exception))
                 }
             }
-
     }
 
     fun authenticateWithFirebase(signInCredential: SignInCredential) {
