@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
@@ -14,12 +13,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -27,14 +23,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import matej.lamza.mycoach.R
+import matej.lamza.mycoach.common.composables.IconRounded
 import matej.lamza.mycoach.ui.theme.Rubik
 
 
 @Composable
-fun ClientCard() {
+fun ClientCard(index: Int) {
     Card(
         modifier = Modifier
-            .fillMaxSize()
             .padding(16.dp)
             .clickable { },
         elevation = 10.dp,
@@ -46,7 +42,7 @@ fun ClientCard() {
             contentScale = ContentScale.FillBounds
         )
         Column(verticalArrangement = Arrangement.Center) {
-            ClientNameComponenet()
+            ClientNameComponenet(index)
             Spacer(modifier = Modifier.height(30.dp))
             TimeSlotComponent()
             Spacer(modifier = Modifier.height(30.dp))
@@ -70,7 +66,7 @@ private fun TimeSlotComponent() {
 }
 
 @Composable
-private fun ClientNameComponenet() {
+private fun ClientNameComponenet(index: Int) {
     val clientName = buildAnnotatedString {
         pushStyle(
             SpanStyle(
@@ -80,7 +76,7 @@ private fun ClientNameComponenet() {
                 fontSize = 32.sp
             )
         )
-        append("Milica \n")
+        append("Milica $index \n")
         append("Krmpotic")
         toAnnotatedString()
     }
@@ -96,33 +92,46 @@ private fun WorkoutSummaryComponenet() {
         shape = RoundedCornerShape(20.dp)
     ) {
         Column(
-            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .background(Color.White)
-                .padding(10.dp)
+                .padding(5.dp)
         ) {
-            Box(
-                Modifier
-                    .clip(CircleShape)
-                    .size(30.dp)
-                    .background(Color(183, 186, 140))
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
             ) {
-                Image(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.cardio_icon),
-                    contentDescription = null,
-                    modifier = Modifier.padding(3.dp)
-                )
+                IconRounded(vectorResourceID = R.drawable.cardio_icon)
             }
 
-            Text("Includes", fontWeight = FontWeight.Light, fontFamily = Rubik, fontSize = 10.sp)
-            Text("5 Cardio Exercises", fontFamily = Rubik, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+            Text(
+                "Includes",
+                fontWeight = FontWeight.Light,
+                fontFamily = Rubik,
+                fontSize = 10.sp,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                "5 Cardio Exercises",
+                fontFamily = Rubik,
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp,
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 }
 
 @Preview
 @Composable
+fun WorkoutComponenet() {
+    WorkoutSummaryComponenet()
+}
+
+/*@Preview
+@Composable
 fun ClientCardPreview() {
     ClientCard()
-}
+}*/

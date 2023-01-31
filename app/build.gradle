@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "matej.lamza.mycoach"
-        minSdk 24
+        minSdk 25
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -87,6 +87,8 @@ dependencies {
     //GSON
     implementation "com.google.code.gson:gson:$gson_version"
 
+    implementation "com.google.accompanist:accompanist-pager:0.29.1-alpha"
+
 
     //Koin Jetpack Compose
     implementation "io.insert-koin:koin-androidx-compose:$koin_compose_version"
@@ -99,6 +101,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'androidx.navigation:navigation-runtime-ktx:2.5.3'
+    implementation 'androidx.wear.compose:compose-material:1.0.0-alpha19'
 
     //endregion
 

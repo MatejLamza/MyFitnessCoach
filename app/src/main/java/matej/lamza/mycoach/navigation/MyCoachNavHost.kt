@@ -26,7 +26,7 @@ fun MyCoachNavHost(
             val splashViewModel = koinViewModel<SplashViewModel>()
             SplashRoute(splashViewModel,
                 onSessionNotFound = { navController.navigate(AppRoute.SIGN_IN) { launchSingleTop = true } },
-                onSessionFound = { navController.navigate(AppRoute.HOME) }
+                onSessionFound = { navController.navigate(AppRoute.HOME) { launchSingleTop = true } }
             )
         }
         composable(AppRoute.SIGN_IN) {
