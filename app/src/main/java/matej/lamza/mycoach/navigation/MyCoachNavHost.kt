@@ -25,15 +25,24 @@ fun MyCoachNavHost(
         composable(AppRoute.SPLASH) {
             val splashViewModel = koinViewModel<SplashViewModel>()
             SplashRoute(splashViewModel,
-                onSessionNotFound = { navController.navigate(AppRoute.SIGN_IN) { launchSingleTop = true } },
-                onSessionFound = { navController.navigate(AppRoute.HOME) }
+                onSessionNotFound = {
+                    navController.navigate(AppRoute.SIGN_IN) { popUpTo(AppRoute.SPLASH) { inclusive = true } }
+                },
+                onSessionFound = {
+                    navController.navigate(AppRoute.HOME) { popUpTo(AppRoute.SPLASH) { inclusive = true } }
+                }
             )
         }
         composable(AppRoute.SIGN_IN) {
             val loginViewModel = koinViewModel<LoginViewModel>()
             SignInRoute(
                 loginViewModel = loginViewModel,
-                onLoginSuccess = { navController.navigate(AppRoute.HOME) { launchSingleTop = true } },
+                onLoginSuccess = {
+                    navController.navigate(AppRoute.HOME) {
+                        popUpTo(AppRoute.SIGN_IN) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
             )
         }
         composable(AppRoute.HOME) { HomeScreen() }

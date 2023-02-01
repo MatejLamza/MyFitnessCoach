@@ -12,7 +12,7 @@ object ErrorMapper {
         return when (throwable) {
             is ApiException -> {
                 Log.d("LoginGoogle", "mapError: tu sam")
-                NoGoogleAccountFound().mapToErrorMessage()
+                NoGoogleAccountFound().toErrorMessage()
             }
             else -> {
                 Log.d("LoginGoogle", "mapError: else ")
@@ -23,7 +23,7 @@ object ErrorMapper {
 
     fun mapException(exception: Exception): ErrorMessage {
         return when (exception) {
-            is ApiException -> NoGoogleAccountFound().mapToErrorMessage()
+            is ApiException -> NoGoogleAccountFound().toErrorMessage()
             else -> UnknownErrorException().toErrorMessage()
         }
     }
