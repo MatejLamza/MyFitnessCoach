@@ -2,6 +2,8 @@ package matej.lamza.mycoach.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,6 +12,7 @@ import matej.lamza.mycoach.ui.signin.LoginViewModel
 import matej.lamza.mycoach.ui.signin.SignInRoute
 import matej.lamza.mycoach.ui.splash.SplashRoute
 import matej.lamza.mycoach.ui.splash.SplashViewModel
+import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -20,31 +23,40 @@ fun MyCoachNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = AppRoute.SPLASH
+        startDestination = Screen.Splash.route
     ) {
-        composable(AppRoute.SPLASH) {
-            val splashViewModel = koinViewModel<SplashViewModel>()
-            SplashRoute(splashViewModel,
-                onSessionNotFound = {
-                    navController.navigate(AppRoute.SIGN_IN) { popUpTo(AppRoute.SPLASH) { inclusive = true } }
-                },
-                onSessionFound = {
-                    navController.navigate(AppRoute.HOME) { popUpTo(AppRoute.SPLASH) { inclusive = true } }
-                }
+
+        composable(route = Screen.Splash.route) {
+            val context = LocalContext.current
+            SplashRoute(getViewModel<SplashViewModel>(),
+                onSessionNotFound = { navController.navigateSingleTopTo(Screen.Login.route) },
+                onSessionFound = { navController.navigateSingleTopTo(Screen.Home.route) }
             )
         }
-        composable(AppRoute.SIGN_IN) {
+        composable(route = Screen.Login.route) {
             val loginViewModel = koinViewModel<LoginViewModel>()
             SignInRoute(
                 loginViewModel = loginViewModel,
-                onLoginSuccess = {
-                    navController.navigate(AppRoute.HOME) {
-                        popUpTo(AppRoute.SIGN_IN) { inclusive = true }
-                        launchSingleTop = true
-                    }
-                },
+                onLoginSuccess = { navController.navigateSingleTopTo(Screen.Home.route) },
             )
         }
-        composable(AppRoute.HOME) { HomeScreen() }
+        composable(route = Screen.Home.route) { HomeScreen() }
     }
 }
+
+fun NavHostController.navigateSingleTopTo(route: String) =
+    this.navigate(route) {
+        // Pop up to the start destination of the graph to
+        // avoid building up a large stack of destinations
+        // on the back stack as users select items
+        popUpTo(
+            this@navigateSingleTopTo.graph.findStartDestination().id
+        ) {
+            saveState = true
+            inclusive = true
+        }
+        // Avoid multiple copies of the same destination when reselecting the same item
+        launchSingleTop = true
+        // Restore state when reselecting a previously selected item
+        restoreState = true
+    }

@@ -1,13 +1,13 @@
 package matej.lamza.mycoach.ui.splash
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 
 @Composable
 fun SplashRoute(splashViewModel: SplashViewModel, onSessionFound: () -> Unit, onSessionNotFound: () -> Unit) {
-    val uiState by splashViewModel.uiState.collectAsState()
+    val uiState by splashViewModel.uiState.collectAsStateWithLifecycle()
     SplashRoute(uiState = uiState, onSessionFound, onSessionNotFound)
 }
 
