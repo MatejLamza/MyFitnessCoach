@@ -27,7 +27,7 @@ fun SignInScreen(
     authWithFirebase: (SignInCredential) -> Unit,
     onSignInClick: (SignInClient, ActivityResultLauncher<IntentSenderRequest>) -> Unit,
     onLoginSuccess: (() -> Unit),
-    onErrorDismissed: (Long) -> Unit,
+    onErrorDismiss: (Long) -> Unit,
     getToken: ((ActivityResult, SignInClient) -> SignInCredential?)
 ) {
 
@@ -58,7 +58,7 @@ fun SignInScreen(
         UIErrorHandler(
             context = LocalContext.current,
             uiState = uiState,
-            onErrorDismissed = onErrorDismissed,
+            onErrorDismiss = onErrorDismiss,
         )
     }
 }

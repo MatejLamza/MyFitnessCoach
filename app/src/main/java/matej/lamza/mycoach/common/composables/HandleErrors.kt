@@ -10,12 +10,12 @@ import matej.lamza.mycoach.common.state.UiState
 fun UIErrorHandler(
     context: Context,
     uiState: UiState,
-    onErrorDismissed: (Long) -> Unit,
+    onErrorDismiss: (Long) -> Unit,
 ) {
     if (uiState.errorMessages.isNotEmpty()) {
         val errorMessage = remember(uiState) { uiState.errorMessages[0] }
         val errorMessageText = stringResource(id = errorMessage.messageId)
-        val onErrorDismissState by rememberUpdatedState(onErrorDismissed)
+        val onErrorDismissState by rememberUpdatedState(onErrorDismiss)
 
         LaunchedEffect(errorMessageText) {
             Toast.makeText(context, errorMessageText, Toast.LENGTH_LONG).show()

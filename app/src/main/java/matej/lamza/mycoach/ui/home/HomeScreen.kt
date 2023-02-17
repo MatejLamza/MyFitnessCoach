@@ -34,6 +34,9 @@ import kotlinx.coroutines.delay
 import matej.lamza.mycoach.R
 import matej.lamza.mycoach.ui.theme.*
 
+private const val SPLASH = 1000L
+private const val ANIMATION = 200L
+private const val ANIMATION_SHORT = 100L
 
 @Composable
 fun HomeScreen() {
@@ -51,17 +54,17 @@ fun HomeScreen() {
             var isClientVisible by remember { mutableStateOf(false) }
 
             LaunchedEffect(LocalContext.current) {
-                delay(1000)
+                delay(SPLASH)
                 isAvatarVisible = !isAvatarVisible
-                delay(100)
+                delay(ANIMATION_SHORT)
                 isNameVisible = !isNameVisible
-                delay(200)
+                delay(ANIMATION)
                 isMessageVisible = !isMessageVisible
-                delay(100)
+                delay(ANIMATION_SHORT)
                 isChallengeVisible = !isChallengeVisible
-                delay(200)
+                delay(ANIMATION)
                 isWorkoutVisible = !isWorkoutVisible
-                delay(200)
+                delay(ANIMATION)
                 isClientVisible = !isClientVisible
             }
 
@@ -361,7 +364,7 @@ fun NextClientCard() {
 
 @Preview
 @Composable
-fun PreviewClientCard() {
+private fun PreviewClientCard() {
     NextClientCard()
 }
 

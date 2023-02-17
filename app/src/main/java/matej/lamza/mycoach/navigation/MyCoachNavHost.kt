@@ -2,7 +2,6 @@ package matej.lamza.mycoach.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -27,7 +26,6 @@ fun MyCoachNavHost(
     ) {
 
         composable(route = Screen.Splash.route) {
-            val context = LocalContext.current
             SplashRoute(getViewModel<SplashViewModel>(),
                 onSessionNotFound = { navController.navigateSingleTopTo(Screen.Login.route) },
                 onSessionFound = { navController.navigateSingleTopTo(Screen.Home.route) }

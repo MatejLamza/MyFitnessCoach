@@ -3,7 +3,6 @@ package matej.lamza.mycoach.ui.google
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -35,6 +34,6 @@ fun GoogleSignInButton(onClick: (() -> Unit)) {
 
 @Preview
 @Composable
-fun GoogleSignInButtonPreview() {
+private fun GoogleSignInButtonPreview() {
     GoogleSignInButton {}
 }
