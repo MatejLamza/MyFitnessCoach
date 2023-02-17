@@ -1,7 +1,7 @@
 package matej.lamza.mycoach.navigation
 
-object AppRoute {
-    const val SPLASH = "splash"
-    const val SIGN_IN = "sign_in"
-    const val HOME = "home"
+sealed class Screen(val route: String) {
+    object Splash : Screen(route = "splash_screen")
+    object Home : Screen(route = "home_screen")
+    object Login : Screen(route = "login_screen")
 }

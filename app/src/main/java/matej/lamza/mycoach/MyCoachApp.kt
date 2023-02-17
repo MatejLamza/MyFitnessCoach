@@ -9,11 +9,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import matej.lamza.mycoach.navigation.MyCoachNavHost
+import matej.lamza.mycoach.ui.theme.MyCoachTheme
 
 @Composable
 fun MyCoachApp() {
-    val navController = rememberNavController()
-    MyCoachContent(navController = navController)
+    MyCoachTheme() {
+        val navController = rememberNavController()
+        MyCoachContent(navController = navController)
+    }
 }
 
 @Composable

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import matej.lamza.mycoach.R
@@ -15,6 +16,8 @@ import matej.lamza.mycoach.data.local.session.SessionPrefs
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
+
+private const val ANIMATION_DURATION = 500L
 
 sealed interface SplashUIState {
     val isLoading: Boolean
@@ -40,6 +43,7 @@ class SplashViewModel(private val sessionPrefs: SessionPrefs, private val fireba
     private val viewModelState = MutableStateFlow(SplashViewModelState(isLoading = true))
     val uiState = viewModelState
         .map(SplashViewModelState::toUIState)
+        .distinctUntilChanged()
         .stateIn(viewModelScope, SharingStarted.Eagerly, viewModelState.value.toUIState())
 
     init {
@@ -50,6 +54,7 @@ class SplashViewModel(private val sessionPrefs: SessionPrefs, private val fireba
 
     private fun processSession() =
         launchWithState(viewModelState) {
+            delay(ANIMATION_DURATION)
             val doesSessionExist = sessionPrefs.getUser() != null && firebaseAuth.currentUser != null
             if (!doesSessionExist) State.Error(SessionNotFound())
             else State.Done(data = true)
