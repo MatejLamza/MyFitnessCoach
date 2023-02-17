@@ -20,12 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
@@ -288,6 +290,7 @@ fun MyProfileAvatar() {
         modifier = Modifier
             .size(60.dp)
             .clip(CircleShape)
+            .background(Color.Red)
     ) {
         Column(
             Modifier.fillMaxSize(),
@@ -297,8 +300,8 @@ fun MyProfileAvatar() {
             Image(
                 painterResource(id = R.drawable.avatar),
                 contentDescription = null,
-
-                )
+                contentScale = ContentScale.FillBounds
+            )
         }
     }
 
@@ -310,40 +313,55 @@ fun NextClientCard() {
         elevation = 0.dp,
         backgroundColor = Yellowish,
         shape = RoundedCornerShape(30.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = 250.dp)
     ) {
-        /* Image(
-             painter = painterResource(id = R.drawable.client_card),
-             contentDescription = null,
-             contentScale = ContentScale.FillBounds
-         )*/
         Column(
             Modifier
                 .fillMaxSize()
-                .padding(20.dp)
+                .padding(PaddingValues(top = 40.dp, bottom = 20.dp, start = 20.dp, end = 20.dp))
+
         ) {
             Text(
-                "Andy  Hansen",
+                "Andy  \n Hansen",
                 fontWeight = FontWeight.Bold,
                 fontFamily = Rubik,
                 fontSize = 20.sp,
                 color = Blackish
             )
-            Text("2pm - 3pm", fontWeight = FontWeight.Normal, fontFamily = Rubik, fontSize = 12.sp, color = Blackish)
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Blackish)
-            ) {
-                Column(
-                    modifier = Modifier.padding(10.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+            Spacer(modifier = Modifier.height(15.dp))
+            Text("2pm - 3pm", fontWeight = FontWeight.Normal, fontFamily = Rubik, fontSize = 14.sp, color = Blackish)
+            Column(modifier = Modifier.weight(2f), verticalArrangement = Arrangement.Bottom) {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(Blackish)
+                        .padding(vertical = 10.dp, horizontal = 30.dp)
                 ) {
-                    Text("Cardio", fontSize = 10.sp, fontFamily = Rubik, fontWeight = FontWeight.Normal)
+                    Column(
+                        modifier = Modifier.padding(10.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            "Cardio",
+                            fontSize = 14.sp,
+                            fontFamily = Rubik,
+                            fontWeight = FontWeight.Normal,
+                            color = Color.White
+                        )
+                    }
                 }
             }
+
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewClientCard() {
+    NextClientCard()
 }
 
