@@ -1,6 +1,6 @@
 package matej.lamza.mycoach.data.local.enums
 
-enum class Sex {
+enum class Gender {
     MALE,
     FEMALE;
 }

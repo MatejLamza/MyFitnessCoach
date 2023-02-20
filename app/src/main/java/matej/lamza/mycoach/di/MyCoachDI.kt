@@ -3,6 +3,7 @@ package matej.lamza.mycoach.di
 import android.app.Application
 import matej.lamza.mycoach.di.modules.appModule
 import matej.lamza.mycoach.di.modules.networkModule
+import matej.lamza.mycoach.di.modules.repoModule
 import matej.lamza.mycoach.di.modules.viewModelModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -16,7 +17,8 @@ class MyCoachDI(private val application: Application) {
     private val modules: List<Module> = listOf(
         appModule,
         networkModule,
-        viewModelModules
+        viewModelModules,
+        repoModule
     )
 
     fun initialize() {

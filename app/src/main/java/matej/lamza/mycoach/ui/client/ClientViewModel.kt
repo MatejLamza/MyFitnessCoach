@@ -2,27 +2,28 @@ package matej.lamza.mycoach.ui.client
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.google.firebase.database.FirebaseDatabase
-import matej.lamza.mycoach.BuildConfig
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
 import matej.lamza.mycoach.data.local.Client
+import matej.lamza.mycoach.data.repo.client.ClientRepo
 
-class ClientViewModel(private val database: FirebaseDatabase) : ViewModel() {
+class ClientViewModel(private val clientRepo: ClientRepo) : ViewModel() {
 
-    private val database2 = FirebaseDatabase.getInstance(BuildConfig.FIREBASE)
+    private val _clientSlots = clientRepo.getClients().debounce(100)
 
-    fun addUserToFirestore(client: Client) {
-        database2.reference.child("users").child("1").setValue(client)
-            .addOnSuccessListener {
-                // Write was successful!
-                // ...
-                Log.d("bbb", "addUserToFirestore: ")
+    init {
+        viewModelScope.launch {
+            _clientSlots.collect {
+                Log.d("bbb", "tu sam: ${it.size}")
             }
-            .addOnFailureListener {
-                // Write failed
-                // ...
-                Log.e("bbb", "addUserToFirestore: ", it)
-            }
+        }
     }
 
+    fun saveClient(client: Client) {
+        viewModelScope.launch {
+            clientRepo.addClient(client = client)
+        }
+    }
 
 }
