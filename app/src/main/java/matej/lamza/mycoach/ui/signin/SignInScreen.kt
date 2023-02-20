@@ -24,7 +24,7 @@ import matej.lamza.mycoach.ui.google.GoogleSignInButton
 @Composable
 fun SignInScreen(
     uiState: LoginUIState,
-    authWithFirebase: (SignInCredential) -> Unit,
+    onFirebaseAuth: (SignInCredential) -> Unit,
     onSignInClick: (SignInClient, ActivityResultLauncher<IntentSenderRequest>) -> Unit,
     onLoginSuccess: (() -> Unit),
     onErrorDismiss: (Long) -> Unit,
@@ -37,7 +37,7 @@ fun SignInScreen(
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
         val credentials = getToken(it, oneTapClient)
         if (credentials != null) {
-            authWithFirebase.invoke(credentials)
+            onFirebaseAuth.invoke(credentials)
         }
     }
 

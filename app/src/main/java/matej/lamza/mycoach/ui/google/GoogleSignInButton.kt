@@ -14,6 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import matej.lamza.mycoach.R
 
+private const val WEIGHT = 3f
+
 @Composable
 fun GoogleSignInButton(onClick: (() -> Unit)) {
     Button(
@@ -27,7 +29,7 @@ fun GoogleSignInButton(onClick: (() -> Unit)) {
                 imageVector = ImageVector.vectorResource(id = R.drawable.logo_googleg_48dp),
                 contentDescription = null
             )
-            Text("Continue with google", Modifier.weight(3f))
+            Text("Continue with google", Modifier.weight(WEIGHT))
         }
     }
 }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import matej.lamza.mycoach.R
 import matej.lamza.mycoach.common.ErrorMessage
 import matej.lamza.mycoach.common.exception.SessionNotFound
+import matej.lamza.mycoach.common.exception.UnknownErrorException
 import matej.lamza.mycoach.common.state.State
 import matej.lamza.mycoach.data.local.session.SessionPrefs
 import java.util.*
@@ -77,7 +78,7 @@ class SplashViewModel(private val sessionPrefs: SessionPrefs, private val fireba
                         )
                         it.copy(isUserFound = null, errorMessages = errorMessages, isLoading = false)
                     }
-                    else -> throw java.lang.IllegalStateException("")
+                    else -> throw UnknownErrorException()
                 }
             }
         }

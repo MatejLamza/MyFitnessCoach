@@ -120,7 +120,7 @@ class LoginViewModel(private val sessionProvider: SessionProvider) : ViewModel()
                         val errorMessages = it.errorMessages + error
                         it.copy(isLoading = false, errorMessages = errorMessages)
                     }
-                    else -> throw IllegalStateException("")
+                    else -> throw UnknownErrorException()
                 }
             }
         }

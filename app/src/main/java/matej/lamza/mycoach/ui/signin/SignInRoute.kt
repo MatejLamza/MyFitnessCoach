@@ -13,18 +13,18 @@ import matej.lamza.mycoach.ui.google.getIDTokenFromGoogle
 @Composable
 fun SignInRoute(
     uiState: LoginUIState,
-    authWithFirebase: (SignInCredential) -> Unit,
+    onFirebaseAuth: (SignInCredential) -> Unit,
     onSignInClick: (SignInClient, ActivityResultLauncher<IntentSenderRequest>) -> Unit,
     onLoginSuccess: () -> Unit,
-    onErrorDismissed: (Long) -> Unit,
+    onErrorDismiss: (Long) -> Unit,
     getToken: ((ActivityResult, SignInClient) -> SignInCredential?)
 ) {
     SignInScreen(
         uiState = uiState,
-        authWithFirebase = authWithFirebase,
+        onFirebaseAuth = onFirebaseAuth,
         onSignInClick = onSignInClick,
         onLoginSuccess,
-        onErrorDismissed,
+        onErrorDismiss,
         getToken
     )
 }
@@ -38,12 +38,12 @@ fun SignInRoute(
 
     SignInRoute(
         uiState = uiState,
-        authWithFirebase = { loginViewModel.authenticateWithFirebase(it) },
+        onFirebaseAuth = { loginViewModel.authenticateWithFirebase(it) },
         onSignInClick = { client, request ->
             loginViewModel.signIn(oneTapClient = client, signInLauncher = request)
         },
         onLoginSuccess = onLoginSuccess,
-        onErrorDismissed = { loginViewModel.errorShown(it) },
+        onErrorDismiss = { loginViewModel.errorShown(it) },
         getToken = { act, credential -> getIDTokenFromGoogle(act, credential) }
     )
 }

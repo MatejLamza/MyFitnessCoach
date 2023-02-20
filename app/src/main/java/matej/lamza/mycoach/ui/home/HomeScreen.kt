@@ -37,6 +37,7 @@ import matej.lamza.mycoach.ui.theme.*
 private const val SPLASH = 1000L
 private const val ANIMATION = 200L
 private const val ANIMATION_SHORT = 100L
+private const val WEIGHT = 3f
 
 @Composable
 fun HomeScreen() {
@@ -113,7 +114,7 @@ fun HomeScreen() {
                             fontFamily = Rubik,
                             fontWeight = FontWeight.Normal,
                             color = Color.Black,
-                            modifier = Modifier.weight(3f)
+                            modifier = Modifier.weight(WEIGHT)
                         )
 
                         Icon(
