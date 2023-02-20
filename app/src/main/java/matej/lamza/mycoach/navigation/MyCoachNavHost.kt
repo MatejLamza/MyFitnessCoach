@@ -6,6 +6,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import matej.lamza.mycoach.ui.client.ClientRoute
+import matej.lamza.mycoach.ui.client.ClientViewModel
 import matej.lamza.mycoach.ui.home.HomeScreen
 import matej.lamza.mycoach.ui.signin.LoginViewModel
 import matej.lamza.mycoach.ui.signin.SignInRoute
@@ -27,7 +29,7 @@ fun MyCoachNavHost(
 
         composable(route = Screen.Splash.route) {
             SplashRoute(getViewModel<SplashViewModel>(),
-                onSessionNotFound = { navController.navigateSingleTopTo(Screen.Login.route) },
+                onSessionNotFound = { navController.navigateSingleTopTo(Screen.Client.route) },
                 onSessionFound = { navController.navigateSingleTopTo(Screen.Home.route) }
             )
         }
@@ -39,6 +41,10 @@ fun MyCoachNavHost(
             )
         }
         composable(route = Screen.Home.route) { HomeScreen() }
+        composable(route = Screen.Client.route) {
+            val clientViewModel = koinViewModel<ClientViewModel>()
+            ClientRoute(clientViewModel = clientViewModel)
+        }
     }
 }
 

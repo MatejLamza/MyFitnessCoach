@@ -40,7 +40,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.2.0'
+        kotlinCompilerExtensionVersion '1.4.2'
     }
     packagingOptions {
         resources {
@@ -52,17 +52,18 @@ android {
         develop {
             dimension "environment"
             buildConfigField "String", "WEB_CLIENT_ID", '"71160016830-jmievthqgi14kgjh8shsej74d1002gkg.apps.googleusercontent.com"'
+            buildConfigField "String", "FIREBASE", '"https://fitness-compose-a5487-default-rtdb.europe-west1.firebasedatabase.app/"'
         }
     }
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.1'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'androidx.activity:activity-compose:1.6.1'
     implementation "androidx.compose.ui:ui:$compose_ui_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
-    implementation 'androidx.compose.material:material:1.2.0'
+    implementation 'androidx.compose.material:material:1.3.1'
 
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
@@ -71,7 +72,7 @@ dependencies {
     // LiveData
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version")
-    implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha04"
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
 
 
     //Navigation
@@ -91,12 +92,13 @@ dependencies {
     implementation "io.insert-koin:koin-androidx-compose:$koin_compose_version"
 
     // region Google
-    implementation 'com.google.gms:google-services:4.3.13'
+    implementation 'com.google.gms:google-services:4.3.15'
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
 
     implementation platform('com.google.firebase:firebase-bom:31.1.1')
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'androidx.navigation:navigation-runtime-ktx:2.5.3'
 
     //endregion
