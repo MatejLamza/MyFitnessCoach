@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services' version '4.3.13'
     id 'io.gitlab.arturbosch.detekt' version "$detekt_version"
+    id 'kotlin-kapt'
 
 }
 
@@ -90,6 +91,12 @@ dependencies {
 
     //Koin Jetpack Compose
     implementation "io.insert-koin:koin-androidx-compose:$koin_compose_version"
+
+    //region Room
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    //endregion
 
     // region Google
     implementation 'com.google.gms:google-services:4.3.15'

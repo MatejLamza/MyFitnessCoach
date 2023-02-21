@@ -5,6 +5,8 @@ buildscript {
 
         detekt_version = "1.22.0"
 
+        room_version = "2.5.0"
+
         flipper_version = "0.136.0"
         flipper_soloader = "0.10.1"
 

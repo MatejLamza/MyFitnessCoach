@@ -7,5 +7,5 @@ import org.koin.dsl.module
 
 val repoModule = module {
 
-    single<ClientRepo> { ClientRepoImpl() }
+    single<ClientRepo> { ClientRepoImpl(firebase = get()) }
 }

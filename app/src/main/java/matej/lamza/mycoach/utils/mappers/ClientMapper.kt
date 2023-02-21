@@ -22,6 +22,9 @@ fun DataSnapshot.mapToClientDomain(): List<Client> {
     return clients.toList()
 }
 
+//fun Client.mapToEntity(): ClientEntity = ClientEntity(slotID, name, lastName, dateOfBirth, gender)
+
+
 private fun DataSnapshot.mapGender(key: String): Gender =
     when (getStringValue(key)?.uppercase()) {
         "FEMALE" -> Gender.FEMALE
