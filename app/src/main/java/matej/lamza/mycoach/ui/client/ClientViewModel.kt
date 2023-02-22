@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 import matej.lamza.mycoach.data.local.Client
 import matej.lamza.mycoach.data.local.enums.SearchWidgetState
 import matej.lamza.mycoach.data.repo.client.ClientRepo
-import matej.lamza.mycoach.utils.Mock
 
 private const val TIMEOUT = 100L
 
@@ -28,17 +27,14 @@ class ClientViewModel(private val clientRepo: ClientRepo) : ViewModel() {
     @OptIn(FlowPreview::class)
     private val _clientSlots = clientRepo.getClients().debounce(TIMEOUT)
 
-    private val _clients = MutableStateFlow(Mock.clients)
-
     @OptIn(FlowPreview::class)
     val clients = _searchTextState
         .debounce(1000)
-        .combine(_clients)
+        .combine(_clientSlots)
         { query, clients ->
             if (query.isBlank()) clients
             else clients.filter { it.doesMatchSearchQuery(query) }
-        }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _clients.value)
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     init {
         viewModelScope.launch {
