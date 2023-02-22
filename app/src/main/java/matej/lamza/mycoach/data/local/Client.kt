@@ -15,4 +15,15 @@ data class Client(
 
     fun mapToEntity(): ClientEntity = ClientEntity(slotID, name, lastName, dateOfBirth, gender)
 
+    fun doesMatchSearchQuery(query: String): Boolean {
+        if (name.isEmpty() && lastName.isEmpty()) return false
+        val matchingCombinations = listOf(
+            "$name$lastName",
+            "$name $lastName",
+            "${name.first()} ${lastName.first()}"
+        )
+
+        return matchingCombinations.any { it.contains(query, ignoreCase = true) }
+    }
+
 }

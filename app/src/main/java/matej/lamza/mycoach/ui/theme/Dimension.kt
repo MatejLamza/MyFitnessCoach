@@ -6,6 +6,7 @@ import androidx.compose.ui.unit.dp
 
 //region Component size
 val DEFAULT_CARD_HEIGHT = 250.dp
+val CARD_HEIGHT_SMALL = 150.dp
 
 val CARD_CORNER_RADIUS_DEFAULT = 16.dp
 val CARD_CORNER_RADIUS_LARGE = 32.dp
