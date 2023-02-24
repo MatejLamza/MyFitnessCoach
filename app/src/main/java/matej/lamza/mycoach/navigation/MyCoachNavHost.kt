@@ -30,7 +30,7 @@ fun MyCoachNavHost(
         composable(route = Screen.Splash.route) {
             SplashRoute(getViewModel<SplashViewModel>(),
                 onSessionNotFound = { navController.navigateSingleTopTo(Screen.Login.route) },
-                onSessionFound = { navController.navigateSingleTopTo(Screen.Client.route) }
+                onSessionFound = { navController.navigateSingleTopTo(Screen.Home.route) }
             )
         }
         composable(route = Screen.Login.route) {

@@ -8,6 +8,6 @@ import org.koin.dsl.module
 
 val viewModelModules = module {
     viewModel { SplashViewModel(sessionPrefs = get(), get()) }
-    viewModel { LoginViewModel(sessionProvider = get()) }
+    viewModel { LoginViewModel(sessionProvider = get(), get()) }
     viewModel { ClientViewModel(clientRepo = get()) }
 }

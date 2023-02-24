@@ -1,11 +1,11 @@
 package matej.lamza.mycoach.data
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.AuthResult
 
 data class User(
     val email: String = "",
-    val displayName: String = ""
+    val displayName: String = "",
+    val isLoggedIn: Boolean = false
 )
 
 fun AuthResult.toDomainUser() =
