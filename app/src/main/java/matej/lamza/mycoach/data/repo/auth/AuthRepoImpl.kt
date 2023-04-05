@@ -13,9 +13,15 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import matej.lamza.mycoach.common.FirebaseConstants
 import matej.lamza.mycoach.data.local.Coach
+import matej.lamza.mycoach.data.local.session.SessionPrefs
+import matej.lamza.mycoach.data.toDomainUser
 import kotlin.coroutines.resume
 
-class AuthRepoImpl(private val firebaseAuth: FirebaseAuth, private val firebaseDatabase: FirebaseDatabase) : AuthRepo {
+class AuthRepoImpl(
+    private val firebaseAuth: FirebaseAuth,
+    private val firebaseDatabase: FirebaseDatabase,
+    private val sessionPrefs: SessionPrefs
+) : AuthRepo {
 
     private val coroutineScope = CoroutineScope(IO)
 
@@ -34,14 +40,20 @@ class AuthRepoImpl(private val firebaseAuth: FirebaseAuth, private val firebaseD
         }
 
     override fun signOut() {
-        firebaseAuth.signOut()
+        coroutineScope.launch {
+            sessionPrefs.clear()
+            firebaseAuth.signOut()
+        }
     }
 
     //region Private helper functions
     private fun handleAuthResult(task: Task<AuthResult>) {
         task.addOnSuccessListener { result ->
-            if (result.additionalUserInfo?.isNewUser == true)
-                coroutineScope.launch { saveCoachToFirebase(result) }
+            coroutineScope.launch {
+                sessionPrefs.setUser(result.toDomainUser())
+                if (result.additionalUserInfo?.isNewUser == true)
+                    coroutineScope.launch { saveCoachToFirebase(result) }
+            }
         }
     }
 

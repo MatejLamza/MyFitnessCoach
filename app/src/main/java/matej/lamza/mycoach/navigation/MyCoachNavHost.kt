@@ -1,5 +1,8 @@
 package matej.lamza.mycoach.navigation
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -26,7 +29,6 @@ fun MyCoachNavHost(
         navController = navController,
         startDestination = Screen.Splash.route
     ) {
-
         composable(route = Screen.Splash.route) {
             SplashRoute(getViewModel<SplashViewModel>(),
                 onSessionNotFound = { navController.navigateSingleTopTo(Screen.Login.route) },
@@ -40,10 +42,20 @@ fun MyCoachNavHost(
                 onLoginSuccess = { navController.navigateSingleTopTo(Screen.Home.route) },
             )
         }
-        composable(route = Screen.Home.route) { HomeScreen() }
+        composable(route = Screen.Home.route) { HomeScreen(navController) }
         composable(route = Screen.Client.route) {
             val clientViewModel = koinViewModel<ClientViewModel>()
             ClientRoute(clientViewModel = clientViewModel)
+        }
+        composable(route = Screen.Analytics.route) {
+            Scaffold(Modifier.fillMaxSize()) { _ ->
+                Text("Analytics")
+            }
+        }
+        composable(route = Screen.WorkoutPlan.route) {
+            Scaffold(Modifier.fillMaxSize()) { _ ->
+                Text("Workout Plan")
+            }
         }
     }
 }

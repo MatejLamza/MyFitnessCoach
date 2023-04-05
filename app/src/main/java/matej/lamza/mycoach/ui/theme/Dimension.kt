@@ -1,6 +1,5 @@
 package matej.lamza.mycoach.ui.theme
 
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 
 
@@ -21,4 +20,3 @@ val PADDING_LARGE = 32.dp
 val PADDING_SMALL = 8.dp
 //endregion
 
-val RoundedCornerShapeLarge = RoundedCornerShape(CARD_CORNER_RADIUS_LARGE)

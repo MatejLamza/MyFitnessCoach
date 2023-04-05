@@ -12,7 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -30,8 +30,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import matej.lamza.mycoach.R
+import matej.lamza.mycoach.navigation.BottomNavBar
 import matej.lamza.mycoach.ui.theme.*
 
 private const val SPLASH = 1000L
@@ -40,99 +42,106 @@ private const val ANIMATION_SHORT = 100L
 private const val WEIGHT = 3f
 
 @Composable
-fun HomeScreen() {
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Column(
+fun HomeScreen(navHostController: NavHostController) {
+    Scaffold(bottomBar = { BottomNavBar(navController = navHostController) }) { padding ->
+        val paddingVals = PaddingValues(0.dp, 0.dp, 0.dp, padding.calculateBottomPadding())
+        Box(
             modifier = Modifier
                 .background(Offwhite)
-                .padding(20.dp)
+                .padding(paddingVals)
         ) {
-            var isAvatarVisible by remember { mutableStateOf(false) }
-            var isNameVisible by remember { mutableStateOf(false) }
-            var isMessageVisible by remember { mutableStateOf(false) }
-            var isWorkoutVisible by remember { mutableStateOf(false) }
-            var isChallengeVisible by remember { mutableStateOf(false) }
-            var isClientVisible by remember { mutableStateOf(false) }
+            Column(
+                modifier = Modifier
+                    .background(Offwhite)
+                    .padding(20.dp)
+            ) {
+                var isAvatarVisible by remember { mutableStateOf(false) }
+                var isNameVisible by remember { mutableStateOf(false) }
+                var isMessageVisible by remember { mutableStateOf(false) }
+                var isWorkoutVisible by remember { mutableStateOf(false) }
+                var isChallengeVisible by remember { mutableStateOf(false) }
+                var isClientVisible by remember { mutableStateOf(false) }
 
-            LaunchedEffect(LocalContext.current) {
-                delay(SPLASH)
-                isAvatarVisible = !isAvatarVisible
-                delay(ANIMATION_SHORT)
-                isNameVisible = !isNameVisible
-                delay(ANIMATION)
-                isMessageVisible = !isMessageVisible
-                delay(ANIMATION_SHORT)
-                isChallengeVisible = !isChallengeVisible
-                delay(ANIMATION)
-                isWorkoutVisible = !isWorkoutVisible
-                delay(ANIMATION)
-                isClientVisible = !isClientVisible
-            }
-
-            AnimatedVisibility(visible = isAvatarVisible, enter = slideInVertically() + fadeIn()) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    MyProfileAvatar()
+                LaunchedEffect(LocalContext.current) {
+                    delay(SPLASH)
+                    isAvatarVisible = !isAvatarVisible
+                    delay(ANIMATION_SHORT)
+                    isNameVisible = !isNameVisible
+                    delay(ANIMATION)
+                    isMessageVisible = !isMessageVisible
+                    delay(ANIMATION_SHORT)
+                    isChallengeVisible = !isChallengeVisible
+                    delay(ANIMATION)
+                    isWorkoutVisible = !isWorkoutVisible
+                    delay(ANIMATION)
+                    isClientVisible = !isClientVisible
                 }
 
-            }
-            Spacer(Modifier.height(20.dp))
-            AnimatedVisibility(visible = isNameVisible, enter = slideInHorizontally() + fadeIn()) {
-
-                Text(
-                    "Hello Cubasti,",
-                    fontSize = 40.sp,
-                    fontFamily = Rubik,
-                    fontWeight = FontWeight.Thin,
-                    color = Color.Black,
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            AnimatedVisibility(visible = isMessageVisible, enter = slideInHorizontally() + fadeIn()) {
-                Text(
-                    "Ready for a challenge?",
-                    fontSize = 14.sp,
-                    fontFamily = Rubik,
-                    fontWeight = FontWeight.Normal,
-                    color = Color.Gray
-                )
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            AnimatedVisibility(visible = isChallengeVisible, enter = slideInVertically() + fadeIn()) {
-                ChallengeTile()
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            AnimatedVisibility(visible = isWorkoutVisible, enter = slideInHorizontally() + fadeIn()) {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        Text(
-                            "Your Workout",
-                            fontSize = 20.sp,
-                            fontFamily = Rubik,
-                            fontWeight = FontWeight.Normal,
-                            color = Color.Black,
-                            modifier = Modifier.weight(WEIGHT)
-                        )
-
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.arrow_next),
-                            contentDescription = "go to workout",
-                            modifier = Modifier.weight(1f),
-                            tint = Color.Black
-                        )
+                AnimatedVisibility(visible = isAvatarVisible, enter = slideInVertically() + fadeIn()) {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        MyProfileAvatar()
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    ExerciseTile(Yellowish, R.drawable.icon_dumbell, "Weight Lifting", "5 Sets")
-                    Spacer(modifier = Modifier.height(10.dp))
-                    ExerciseTile(Blueish, R.drawable.sport_jump_rope_svgrepo_com, "Rope Skipping", "1000")
+
                 }
-            }
-            Spacer(modifier = Modifier.height(5.dp))
-            AnimatedVisibility(visible = isClientVisible, enter = slideInVertically() + fadeIn()) {
-                NextClientCard()
+                Spacer(Modifier.height(20.dp))
+                AnimatedVisibility(visible = isNameVisible, enter = slideInHorizontally() + fadeIn()) {
+
+                    Text(
+                        "Hello Cubasti,",
+                        fontSize = 40.sp,
+                        fontFamily = Rubik,
+                        fontWeight = FontWeight.Thin,
+                        color = Color.Black,
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                AnimatedVisibility(visible = isMessageVisible, enter = slideInHorizontally() + fadeIn()) {
+                    Text(
+                        "Ready for a challenge?",
+                        fontSize = 14.sp,
+                        fontFamily = Rubik,
+                        fontWeight = FontWeight.Normal,
+                        color = Color.Gray
+                    )
+                }
+                Spacer(modifier = Modifier.height(20.dp))
+                AnimatedVisibility(visible = isChallengeVisible, enter = slideInVertically() + fadeIn()) {
+                    ChallengeTile()
+                }
+                Spacer(modifier = Modifier.height(20.dp))
+                AnimatedVisibility(visible = isWorkoutVisible, enter = slideInHorizontally() + fadeIn()) {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Text(
+                                "Your Workout",
+                                fontSize = 20.sp,
+                                fontFamily = Rubik,
+                                fontWeight = FontWeight.Normal,
+                                color = Color.Black,
+                                modifier = Modifier.weight(WEIGHT)
+                            )
+
+                            Icon(
+                                imageVector = ImageVector.vectorResource(id = R.drawable.arrow_next),
+                                contentDescription = "go to workout",
+                                modifier = Modifier.weight(1f),
+                                tint = Color.Black
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(10.dp))
+                        ExerciseTile(Yellowish, R.drawable.icon_dumbell, "Weight Lifting", "5 Sets")
+                        Spacer(modifier = Modifier.height(10.dp))
+                        ExerciseTile(Blueish, R.drawable.sport_jump_rope_svgrepo_com, "Rope Skipping", "1000")
+                    }
+                }
+                Spacer(modifier = Modifier.height(5.dp))
+                AnimatedVisibility(visible = isClientVisible, enter = slideInVertically() + fadeIn()) {
+                    NextClientCard()
+                }
             }
         }
     }

@@ -131,6 +131,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
 
     detektPlugins("ru.kode:detekt-rules-compose:1.2.2")
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.10"
 
 }
 
